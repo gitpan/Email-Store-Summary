@@ -2,8 +2,9 @@ package Email::Store::Summary;
 use 5.006;
 use strict;
 use warnings;
-our $VERSION = '1.0';
+our $VERSION = '1.1';
 use base 'Email::Store::DBI';
+use Email::MIME;
 Email::Store::Summary->table("summary");
 Email::Store::Summary->columns(All => qw/mail subject original/);
 Email::Store::Summary->columns(Primary => qw/mail/);
@@ -13,18 +14,28 @@ sub on_store_order { 80 }
 
 sub on_store {
     my ($self, $mail) = @_;
-    my $simple = $mail->simple;
-    my $subject = $simple->header("Subject");
+    my $mime = Email::MIME->new($mail->message);
+    my $subject = $mime->header("Subject");
     $subject =~ s/^(\s*(re|aw):\s*)+//i; 
+
+    # There's a bit of hackery here.
+    my $body = $mail->simple->body;
+    my $charset = $mime->{ct}->{attributes}{charset};
+    if ($charset and $charset !~ /utf-?8/) {
+        eval {
+            require Encode;
+            $body = Encode::decode($charset, $body);
+        };  
+    }   
+
     Email::Store::Summary->create({
         mail => $mail->id,
         subject => $subject,
-        original => first_sentence($simple->body)
+        original => first_sentence($body)
     });
 }
 
 sub on_gather_plucene_fields_order { 80 }
-# Bet you weren't expecting that!
 sub on_gather_plucene_fields {
     my ($self, $mail, $hash) = @_;
     $hash->{subject} = $mail->subject;
