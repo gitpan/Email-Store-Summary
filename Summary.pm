@@ -2,7 +2,7 @@ package Email::Store::Summary;
 use 5.006;
 use strict;
 use warnings;
-our $VERSION = '1.1';
+our $VERSION = '1.2';
 use base 'Email::Store::DBI';
 use Email::MIME;
 Email::Store::Summary->table("summary");
@@ -75,9 +75,19 @@ L<Email::Store::Mail>, L<Text::Original>.
 
 =head1 AUTHOR
 
-Simon Cozens, C<simon@cpan.org>
+The original author is Simon Cozens, E<lt>simon@cpan.orgE<gt>
+Currently maintained by Simon Wistow E<lt>simon@thegestalt.orgE<gt>
 
-This module is distributed under the same terms as Perl itself.
+=head1 SUPPORT
+
+This module is part of the Perl Email Project - http://pep.kwiki.org/
+
+There is a mailing list at pep@perl.org (subscribe at pep-subscribe@perl.org)
+and an archive available at http://nntp.perl.org/group/pep.php
+
+=head1 COPYRIGHT
+
+Copyright 2004, 2005 Simon Cozens
 
 =cut
 
