@@ -1,0 +1,6 @@
+Revision history for Perl extension Email::Store::Summary.
+
+0.01  Wed Jun 16 12:10:27 2004
+	- original version; created by h2xs 1.22 with options
+		-AX -b 5.6.0 -n Email::Store::Summary
+
